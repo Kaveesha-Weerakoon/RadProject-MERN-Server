@@ -1,0 +1,39 @@
+import express from "express";
+import jwt from "jsonwebtoken";
+import bcrypt from 'bcrypt'
+import { CustomerModel } from "../models/Customers.js";
+
+const router = express.Router();
+
+router.post("/register", async (req, res) => {
+    const { username, email, dateofbirth, contactno, password } = req.body;
+    const customer = await CustomerModel.findOne({ email });
+
+    if (customer) {
+        return res.json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newCustomer = new CustomerModel({ username, email, dateofbirth, contactno, password: hashedPassword });
+    await newCustomer.save();
+    res.json({ message: "User registerd Successfully" });
+});
+
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+    const customer = await CustomerModel.findOne({ email });
+
+    if (!customer) {
+        return res.json({ message: "User Doesn't Exists" });
+    }
+    const isPassword = await bcrypt.compare(password, customer.password);
+    if (!isPassword) {
+        return res.json({ message: "User name or password is Incorrect " })
+    }
+
+    const token = jwt.sign({ id: customer._id }, "secret");
+    res.json({ token, User_Id: customer.id })
+});
+
+
+export { router as customerRouter };

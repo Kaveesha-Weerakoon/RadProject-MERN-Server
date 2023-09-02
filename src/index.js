@@ -1,0 +1,19 @@
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+import { customerRouter } from './routes/Customer.js'
+
+const app = express();
+
+app.use(express.json());
+app.use(cors());
+
+app.use("/Customer", customerRouter);
+
+mongoose.connect('mongodb://localhost/Gear').
+    then(() => console.log('Connected to MongoDB ...'))
+    .catch(err => console.log('Could not connect to MongoDB ...'));
+
+app.listen(3001, () => {
+    console.log("Server started");
+})
