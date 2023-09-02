@@ -32,8 +32,16 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign({ id: customer._id }, "secret");
-    res.json({ token, User_Id: customer.id })
+    res.json({ token, userID: customer._id })
 });
 
+router.get('/customer/:id', async (req, res) => {
+    const customer = await CustomerModel.findById(req.params.id);
+
+    if (!customer) {
+        return res.send("Not Found");
+    }
+    res.send(customer);
+})
 
 export { router as customerRouter };
