@@ -10,7 +10,7 @@ router.post("/register", async (req, res) => {
     const customer = await CustomerModel.findOne({ email });
 
     if (customer) {
-        return res.json({ message: "User already exists" });
+        return res.status(400).send('user already exists');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -24,11 +24,11 @@ router.post("/login", async (req, res) => {
     const customer = await CustomerModel.findOne({ email });
 
     if (!customer) {
-        return res.json({ message: "User Doesn't Exists" });
+        return res.status(400).send('Invalid username');
     }
     const isPassword = await bcrypt.compare(password, customer.password);
     if (!isPassword) {
-        return res.json({ message: "User name or password is Incorrect " })
+        return res.status(400).send('Invalid password');
     }
 
     const token = jwt.sign({ id: customer._id }, "secret");
