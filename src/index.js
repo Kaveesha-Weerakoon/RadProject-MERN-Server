@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import { customerRouter } from './routes/Customer.js'
+import { adminRouter } from "./routes/Admin.js";
 
 const app = express();
 
@@ -9,6 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/Customer", customerRouter);
+app.use("/Admin", adminRouter);
 
 mongoose.connect('mongodb://localhost/Gear').
     then(() => console.log('Connected to MongoDB ...'))
