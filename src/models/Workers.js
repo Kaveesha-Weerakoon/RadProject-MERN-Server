@@ -1,35 +1,31 @@
 import mongoose from "mongoose";
 
-const CustomerSchema = new mongoose.Schema({
-    username: {
+const WorkerSchema = new mongoose.Schema({
+    name: {
         type: String,
         required: true,
         minlength: 3,
         maxlength: 255,
     },
-    email: {
+    nic: {
         type: String,
         required: true,
-        minlength: 5,
+        minlength: 12,
         maxlength: 255,
-        unique: true
     },
     address: {
         type: String,
         required: true,
-        minlength: 5,
+        minlength: 4,
         maxlength: 255,
     },
     contactno: {
         type: Number,
         required: true,
-        minlength: 10,
-        maxlength: 15,
-    },
-    password: {
-        type: String,
-        required: true,
+        minlength: 5,
+        maxlength: 255
     }
-})
 
-export const CustomerModel = mongoose.model("Customers", CustomerSchema);
+});
+
+export const WorkerModel = mongoose.model("Workers", WorkerSchema);
